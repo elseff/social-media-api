@@ -1,0 +1,42 @@
+spring:
+  flyway:
+    enabled: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: '${db_url}'
+    username: '${db_username}'
+    password: '${db_password}'
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    org:
+      springframework:
+        web: ERROR
+    com:
+      elseff:
+        project: debug
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: true
+    whitelabel:
+      enabled: true
+
+jwt:
+  secret: 'c29jaWFsbWVkaWE='
