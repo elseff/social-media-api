@@ -96,8 +96,7 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public PostDto findById(@Parameter(description = "id поста", required = true)
                             @PathVariable Long id) {
-        PostEntity post = postService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("post not found"));
+        PostEntity post = postService.findById(id);
 
         return postDtoAssembler.mapPostEntityToDto(post);
     }
@@ -126,7 +125,7 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public PostDto addPost(@RequestBody(description = "Данные для создания поста",
             content = @Content(schema = @Schema(implementation = PostCreationDto.class)))
-                           @Valid PostCreationDto postDto) {
+                           @org.springframework.web.bind.annotation.RequestBody @Valid PostCreationDto postDto) {
         PostEntity post = postDtoAssembler.mapCreationDtoToPostEntity(postDto);
         PostEntity result = postService.addPost(post);
 
@@ -190,7 +189,7 @@ public class PostController {
                               @RequestBody(description = "Данные для обновления поста",
                                       content = @Content(
                                               schema = @Schema(implementation = PostUpdateDto.class)))
-                              @Valid PostUpdateDto post) {
+                              @org.springframework.web.bind.annotation.RequestBody @Valid PostUpdateDto post) {
         PostEntity postEntity = postDtoAssembler.mapUpdateDtoToPostEntity(post);
         PostEntity result = postService.updatePost(id, postEntity);
 

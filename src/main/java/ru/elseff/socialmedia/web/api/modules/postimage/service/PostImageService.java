@@ -36,16 +36,14 @@ public class PostImageService {
 
     @Transactional
     public List<PostImageEntity> findAllByPostId(Long postId) {
-        PostEntity post = postService.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("post not found"));
+        PostEntity post = postService.findById(postId);
 
         return postImageRepository.findAllByPost(post);
     }
 
     @Transactional
     public PostImageEntity uploadPostImage(MultipartFile file, Long postId) {
-        PostEntity post = postService.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("post not found"));
+        PostEntity post = postService.findById(postId);
 
         PostImageEntity image = PostImageEntity.builder()
                 .post(post)
@@ -70,8 +68,7 @@ public class PostImageService {
 
     @Transactional
     public String deleteImage(Long postId, Long imageId) {
-        PostEntity post = postService.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("post not found"));
+        PostEntity post = postService.findById(postId);
 
         PostImageEntity image = postImageRepository.findById(imageId)
                 .orElseThrow(() -> new IllegalArgumentException("image " + imageId + " not found"));

@@ -13,8 +13,6 @@ import ru.elseff.socialmedia.persistense.dao.PostRepository;
 import ru.elseff.socialmedia.web.api.modules.user.service.UserService;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,13 +37,9 @@ public class PostService {
     }
 
     @Transactional
-    public List<PostEntity> findAll() {
-        return postRepository.findAll();
-    }
-
-    @Transactional
-    public Optional<PostEntity> findById(Long id) {
-        return postRepository.findById(id);
+    public PostEntity findById(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("post not found"));
     }
 
     @Transactional
