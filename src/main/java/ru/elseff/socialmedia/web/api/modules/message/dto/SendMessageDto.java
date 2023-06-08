@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SendMessageDto {
 
-    @Max(value = 1000, message = "Длина сообщения не должна превышать 1000 символов")
+    @Size(max = 1000, message = "Длина сообщения не должна превышать 1000 символов")
     @NotNull(message = "Поле текст не должно быть пустым")
     String text;
 

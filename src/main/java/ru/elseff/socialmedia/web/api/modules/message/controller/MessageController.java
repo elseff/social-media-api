@@ -126,7 +126,7 @@ public class MessageController {
                                                   )
                                           )
                                   )
-                                  @Valid SendMessageDto message) {
+                                  @org.springframework.web.bind.annotation.RequestBody @Valid SendMessageDto message) {
         MessageEntity messageEntity = messageService.sendMessageToUserByUsername(message, recipientUsername);
 
         return messageDtoMapper.mapMessageEntityToDto(messageEntity);
