@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -55,4 +56,26 @@ public class PostEntity {
         updatedAt = Timestamp.from(Instant.now());
     }
 
+    @Override
+    public String toString() {
+        return "PostEntity{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PostEntity that)) return false;
+        return getId().equals(that.getId())
+                && getTitle().equals(that.getTitle())
+                && getText().equals(that.getText());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getText());
+    }
 }
