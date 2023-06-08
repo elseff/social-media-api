@@ -2,9 +2,7 @@ package ru.elseff.socialmedia.web.api.modules.auth.service;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -52,6 +50,7 @@ class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Зарегистрироваться, если пользователь уже существует")
     void register_If_User_Already_Exists() {
         String email = getAuthRegisterRequest().getEmail();
 
@@ -70,6 +69,7 @@ class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Зарегистрироваться")
     void register() {
         String email = getAuthRegisterRequest().getEmail();
         UserEntity user = UserEntity.builder()
@@ -105,6 +105,7 @@ class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Залогиниться, если пользователя не существует")
     void login_If_User_Not_Found() {
         String email = "test@test.com";
         AuthLoginRequest authLoginRequest = getAuthLoginRequest();
@@ -124,6 +125,7 @@ class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Залогиниться, если неверный пароль")
     void login_If_Password_Is_Incorrect() {
         AuthLoginRequest authLoginRequest = getAuthLoginRequest();
         UserEntity userFromDb = getUserFromDb();
@@ -147,6 +149,7 @@ class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Залогиниться")
     void login() {
         AuthLoginRequest authLoginRequest = getAuthLoginRequest();
         UserEntity userFromDb = getUserFromDb();
