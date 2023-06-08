@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -42,8 +43,8 @@ class MessageServiceTest {
     @Test
     @DisplayName("Найти все сообщения пользователя")
     void findAllByRecipient() {
-        when(userService.getCurrentAuthUser()).thenReturn(getUserEntity());
-        when(messageRepository.findAllByRecipient(any(UserEntity.class))).thenReturn(Set.of(getMessage1(), getMessage2()));
+        given(userService.getCurrentAuthUser()).willReturn(getUserEntity());
+        given(messageRepository.findAllByRecipient(any(UserEntity.class))).willReturn(Set.of(getMessage1(), getMessage2()));
 
         Set<MessageEntity> expectedMessages = Set.of(getMessage1(), getMessage2());
 
@@ -59,8 +60,8 @@ class MessageServiceTest {
     @Test
     @DisplayName("Найти все сообщения от конкретного пользователя")
     void findAllBySenderUsername() {
-        when(userService.findByUsername(anyString())).thenReturn(java.util.Optional.ofNullable(getUserEntity()));
-        when(messageRepository.findAllBySender(any(UserEntity.class))).thenReturn(Set.of(getMessage1(), getMessage2()));
+        given(userService.findByUsername(anyString())).willReturn(java.util.Optional.ofNullable(getUserEntity()));
+        given(messageRepository.findAllBySender(any(UserEntity.class))).willReturn(Set.of(getMessage1(), getMessage2()));
 
         Set<MessageEntity> expectedMessages = Set.of(getMessage1(), getMessage2());
 
@@ -76,7 +77,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("Найти все сообщения от конкретного пользователя, если он не найден")
     void findAllBySenderUsername_If_Sender_Is_Not_Found() {
-        when(userService.findByUsername(anyString())).thenReturn(Optional.empty());
+        given(userService.findByUsername(anyString())).willReturn(Optional.empty());
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> messageService.findAllBySenderUsername(anyString()));
@@ -93,9 +94,9 @@ class MessageServiceTest {
     @Test
     @DisplayName("Отправить сообщение пользователю по имени")
     void sendMessageToUserByUsername() {
-        when(userService.findByUsername(anyString())).thenReturn(Optional.ofNullable(getUserEntity()));
-        when(userService.getCurrentAuthUser()).thenReturn(getUserEntity());
-        when(messageRepository.save(any(MessageEntity.class))).thenReturn(getMessageEntityFromDb());
+        given(userService.findByUsername(anyString())).willReturn(Optional.ofNullable(getUserEntity()));
+        given(userService.getCurrentAuthUser()).willReturn(getUserEntity());
+        given(messageRepository.save(any(MessageEntity.class))).willReturn(getMessageEntityFromDb());
 
         MessageEntity expectedMessage = getMessageEntityFromDb();
 
@@ -112,7 +113,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("Отправить сообщение несуществующему пользователю")
     void sendMessageToUserByUsername_If_User_Is_Not_Found() {
-        when(userService.findByUsername(anyString())).thenReturn(Optional.empty());
+        given(userService.findByUsername(anyString())).willReturn(Optional.empty());
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> messageService.sendMessageToUserByUsername(getSendMessageDto(), "not found"));
