@@ -1,6 +1,7 @@
 package ru.elseff.socialmedia.web.api.modules.post.dto.mapper;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -24,12 +25,14 @@ public class PostDtoAssembler extends RepresentationModelAssemblerSupport<PostEn
         super(PostController.class, PostDto.class);
     }
 
-    public PostDto mapPostEntityToDto(PostEntity postEntity) {
+    public PostDto mapPostEntityToDto(@NonNull PostEntity postEntity) {
         return PostDto.builder()
                 .id(postEntity.getId())
                 .title(postEntity.getTitle())
                 .text(postEntity.getText())
-                .createdAt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(postEntity.getCreatedAt()))
+                .createdAt(postEntity.getCreatedAt() != null
+                        ? new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(postEntity.getCreatedAt())
+                        : null)
                 .updatedAt(postEntity.getUpdatedAt() != null
                         ? new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(postEntity.getUpdatedAt())
                         : null)
@@ -37,16 +40,20 @@ public class PostDtoAssembler extends RepresentationModelAssemblerSupport<PostEn
                         .id(postEntity.getUser().getId())
                         .username(postEntity.getUser().getUsername())
                         .build())
-                .images(postEntity.getImages().stream().map(image ->
-                        PostImageDto.builder()
-                                .id(image.getId())
-                                .filename(image.getFilename())
-                                .build()
-                ).collect(Collectors.toList()))
+                .images(postEntity.getImages() != null
+                        ? postEntity.getImages()
+                        .stream()
+                        .map(image ->
+                                PostImageDto.builder()
+                                        .id(image.getId())
+                                        .filename(image.getFilename())
+                                        .build()
+                        ).collect(Collectors.toList())
+                        : null)
                 .build();
     }
 
-    public PostEntity mapCreationDtoToPostEntity(PostCreationDto creationDto) {
+    public PostEntity mapCreationDtoToPostEntity(@NonNull PostCreationDto creationDto) {
         return PostEntity.builder()
                 .title(creationDto.getTitle())
                 .text(creationDto.getText())
@@ -54,7 +61,7 @@ public class PostDtoAssembler extends RepresentationModelAssemblerSupport<PostEn
                 .build();
     }
 
-    public PostEntity mapUpdateDtoToPostEntity(PostUpdateDto updateDto) {
+    public PostEntity mapUpdateDtoToPostEntity(@NonNull PostUpdateDto updateDto) {
         return PostEntity.builder()
                 .title(updateDto.getTitle())
                 .text(updateDto.getText())
@@ -63,7 +70,7 @@ public class PostDtoAssembler extends RepresentationModelAssemblerSupport<PostEn
     }
 
     @Override
-    public PostDto toModel(PostEntity entity) {
+    public PostDto toModel(@NonNull PostEntity entity) {
         return mapPostEntityToDto(entity);
     }
 }

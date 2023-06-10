@@ -66,7 +66,7 @@ public class PostService {
         PostEntity postFromDb = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("post not found"));
 
-        if (isCurrentUserOwnPost(post)) {
+        if (isCurrentUserOwnPost(postFromDb)) {
             if (post.getTitle() != null)
                 postFromDb.setTitle(post.getTitle());
             if (post.getText() != null)
