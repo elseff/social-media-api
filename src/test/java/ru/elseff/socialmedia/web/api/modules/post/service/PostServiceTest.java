@@ -168,7 +168,7 @@ class PostServiceTest {
     @DisplayName("Обновить пост")
     void updatePost() {
         given(userService.getCurrentAuthUser()).willReturn(getUser());
-        given(postRepository.findById(anyLong())).willReturn(Optional.ofNullable(getPost1()));
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(getPost1()));
         given(postRepository.save(any(PostEntity.class))).willReturn(getUpdatedPostFromDb());
 
         PostEntity expectedUpdatedPost = getUpdatedPostFromDb();
@@ -257,6 +257,7 @@ class PostServiceTest {
                 .id(1L)
                 .title("test post title")
                 .text("test post text")
+                .user(getUser())
                 .build();
     }
 

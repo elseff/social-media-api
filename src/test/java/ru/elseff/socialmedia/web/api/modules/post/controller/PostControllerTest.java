@@ -404,6 +404,7 @@ class PostControllerTest {
                 .title("test title")
                 .text("test text")
                 .images(new HashSet<>())
+                .user(getUser1())
                 .build();
     }
 
