@@ -65,7 +65,6 @@ public class PostImageController {
                 .collect(Collectors.toSet());
     }
 
-
     @Operation(
             method = "POST",
             summary = "Загрузить изображение",
@@ -73,7 +72,7 @@ public class PostImageController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "",
+                            description = "Успешно",
                             content = @Content(
                                     schema = @Schema(implementation = PostImageDto.class)
                             )
@@ -103,7 +102,8 @@ public class PostImageController {
                             )
                     ))
             @RequestParam("image") MultipartFile multipartFile) {
-        PostImageEntity image = postImageService.uploadPostImage(multipartFile, postId);
+        PostImageEntity image = postImageService.uploadPostImage(multipartFile, postId)
+                .orElseThrow(() -> new RuntimeException("something wrong"));
 
         return postImageDtoMapper.mapPostImageEntityToDto(image);
     }

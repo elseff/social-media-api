@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -42,7 +43,7 @@ public class PostImageService {
     }
 
     @Transactional
-    public PostImageEntity uploadPostImage(MultipartFile file, Long postId) {
+    public Optional<PostImageEntity> uploadPostImage(MultipartFile file, Long postId) {
         PostEntity post = postService.findById(postId);
 
         PostImageEntity image = PostImageEntity.builder()
@@ -59,35 +60,15 @@ public class PostImageService {
             Path path = root.resolve(encodeFilename);
             Files.copy(file.getInputStream(), path);
             log.info("file saved successfully");
+            return Optional.of(postImageRepository.save(image));
         } catch (IOException e) {
             e.printStackTrace();
             log.error("failed to save file {}", file.getOriginalFilename());
         }
-        return postImageRepository.save(image);
+        return Optional.empty();
     }
 
-    @Transactional
-    public String deleteImage(Long postId, Long imageId) {
-        PostEntity post = postService.findById(postId);
-
-        PostImageEntity image = postImageRepository.findById(imageId)
-                .orElseThrow(() -> new IllegalArgumentException("image " + imageId + " not found"));
-
-        String[] partsFileName = image.getFilename().split("\\.");
-        String name = partsFileName[0];
-        String extension = partsFileName[1];
-
-        String encodedFilename = Base64.getEncoder().encodeToString(name.getBytes(StandardCharsets.UTF_8));
-
-        Path path = root.resolve(encodedFilename + "." + extension);
-
-        try {
-            Files.deleteIfExists(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        postImageRepository.delete(image);
-        return "deletion successful";
+    public Path getRoot() {
+        return root;
     }
 }
