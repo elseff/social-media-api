@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -55,9 +54,6 @@ class PostControllerTest {
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
     @Autowired
-    PagedResourcesAssembler<PostEntity> pagedResourcesAssembler;
-
-    @Autowired
     PostDtoAssembler postDtoAssembler;
 
     @Autowired
@@ -90,7 +86,6 @@ class PostControllerTest {
         Assertions.assertNotNull(mockMvc);
         Assertions.assertNotNull(postService);
         Assertions.assertNotNull(userRepository);
-        Assertions.assertNotNull(pagedResourcesAssembler);
     }
 
     @BeforeEach
