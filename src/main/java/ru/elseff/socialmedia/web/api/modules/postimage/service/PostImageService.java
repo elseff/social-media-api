@@ -33,7 +33,7 @@ public class PostImageService {
 
     PostImageRepository postImageRepository;
 
-    Path root = Paths.get("./uploads/postimages");
+    Path root = Paths.get("uploads/postimages");
 
     @Transactional
     public List<PostImageEntity> findAllByPostId(Long postId) {
