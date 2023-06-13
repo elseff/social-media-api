@@ -206,7 +206,7 @@ class PostImageControllerTest {
     }
 
     private MockMultipartFile getMultipartFile2() {
-        return new MockMultipartFile("test2",
+        return new MockMultipartFile("image",
                 "test2.test",
                 MediaType.IMAGE_PNG_VALUE,
                 "test2".getBytes(StandardCharsets.UTF_8));
