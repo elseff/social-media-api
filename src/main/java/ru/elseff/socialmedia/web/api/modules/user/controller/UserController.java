@@ -78,7 +78,14 @@ public class UserController {
         List<UserEntity> friends = userService.findFriendsByUsername(user.getUsername());
         return friends
                 .stream()
-                .map(userDtoMapper::mapUserEntityToDto)
+                .map(usr -> {
+                    UserDto dto = userDtoMapper.mapUserEntityToDto(usr);
+                    dto.setEmail(null);
+                    dto.setPassword(null);
+                    dto.setRoles(null);
+                    dto.setMessages(null);
+                    return dto;
+                })
                 .collect(Collectors.toSet());
     }
 }
