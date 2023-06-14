@@ -13,5 +13,7 @@ import java.util.Optional;
 public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity, SubscriptionID> {
     Optional<SubscriptionEntity> findByUser(UserEntity user);
 
+    Optional<SubscriptionEntity> findByUserAndSubscriber(UserEntity user, UserEntity subscriber);
+
     List<SubscriptionEntity> findAllByUserAndAccepted(UserEntity user, Boolean accepted);
 }

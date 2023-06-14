@@ -20,7 +20,7 @@ import ru.elseff.socialmedia.web.api.modules.subscription.service.SubscriptionSe
 @SecurityRequirement(name = "Bearer Authentication")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Subscription Controller", description = "Управление подписками")
-@RequestMapping(value = "/api/v1/subscriptions", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/api/v1/subscriptions")
 public class SubscriptionController {
 
     SubscriptionService subscriptionService;
@@ -50,34 +50,6 @@ public class SubscriptionController {
                                           @PathVariable(name = "username") String username) {
         return SubscriptionResponse.builder()
                 .subscriptionStatus(subscriptionService.changeSub(username))
-                .build();
-    }
-
-    @Operation(
-            method = "POST",
-            summary = "Подтвердить подписку",
-            description = "Подтвердить подписку пользователя",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "202",
-                            description = "Подписка успешно подтверждена",
-                            content = @Content(
-                                    schema = @Schema(implementation = SubscriptionResponse.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Пользователь не найден",
-                            content = @Content
-                    )
-            }
-    )
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @PostMapping("/accept/{username}")
-    public SubscriptionResponse acceptSubscription(@Parameter(description = "Имя пользователя", required = true)
-                                                   @PathVariable(name = "username") String subscriberUsername) {
-        return SubscriptionResponse.builder()
-                .subscriptionStatus(subscriptionService.acceptSubscription(subscriberUsername))
                 .build();
     }
 }

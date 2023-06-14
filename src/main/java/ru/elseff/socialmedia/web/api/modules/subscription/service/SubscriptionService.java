@@ -32,63 +32,49 @@ public class SubscriptionService {
         if (subscriber.getUsername().equals(user.getUsername()))
             return "You can't subscribe yourself";
 
-        Optional<SubscriptionEntity> subOptional = subscriptionRepository.findByUser(user);
-        if (subOptional.isPresent()) {
-            subscriptionRepository.delete(subOptional.get());
-
-            //may be they were friends
-            Optional<SubscriptionEntity> inverseSubOptional = subscriptionRepository.findByUser(subscriber);
-            if (inverseSubOptional.isPresent()) {
-                SubscriptionEntity subscription = inverseSubOptional.get();
-                subscription.setAccepted(false);
+        Optional<SubscriptionEntity> subOptional = subscriptionRepository.findByUserAndSubscriber(user, subscriber);
+        if (subOptional.isPresent()) {//если мы подписаны на него, то удаляем нашу подписку и отменяем его, если она есть
+            subscriptionRepository.delete(subOptional.get());// удалили нашу подписку
+            /*
+            если он подписан на нас, статус его подписки - не принята
+            */
+            Optional<SubscriptionEntity> inversed = subscriptionRepository.findByUserAndSubscriber(subscriber, user);
+            inversed.ifPresent(sub -> {
+                sub.setAccepted(false);
+                subscriptionRepository.save(sub);
+            });
+            return "subscription on " + username + " canceled";
+        } else {// если такой подписки не найдено, то есть либо это новый человек, либо нужно принять подписку
+            Optional<SubscriptionEntity> inversed = subscriptionRepository.findByUserAndSubscriber(subscriber, user);
+            if (inversed.isPresent()) { //вдруг этот человек подписан на нас
+                SubscriptionEntity subscriptionEntity = inversed.get();
+                subscriptionEntity.setAccepted(true);
+                SubscriptionID id = SubscriptionID.builder()
+                        .userId(user.getId())
+                        .subscriberId(subscriber.getId())
+                        .build();
+                SubscriptionEntity subscription = SubscriptionEntity.builder()
+                        .id(id)
+                        .user(user)
+                        .subscriber(subscriber)
+                        .accepted(true)
+                        .build();
+                subscriptionRepository.save(subscription);
+                return "subscription of " + username + " accepted";
+            } else { //если не подписан на нас, мы подписываемся на него
+                SubscriptionID id = SubscriptionID.builder()
+                        .userId(user.getId())
+                        .subscriberId(subscriber.getId())
+                        .build();
+                SubscriptionEntity subscription = SubscriptionEntity.builder()
+                        .id(id)
+                        .subscriber(subscriber)
+                        .user(user)
+                        .accepted(false)
+                        .build();
+                subscriptionRepository.save(subscription);
+                return "you subscribe " + username + " now";
             }
-
-            return "canceled subscription on " + username;
-        } else {
-            SubscriptionEntity subscription = SubscriptionEntity.builder()
-                    .id(SubscriptionID.builder()
-                            .userId(user.getId())
-                            .subscriberId(subscriber.getId())
-                            .build())
-                    .user(user)
-                    .subscriber(subscriber)
-                    .accepted(false)
-                    .build();
-            subscriptionRepository.save(subscription);
-            return "you subscriber " + username + " now";
         }
     }
-
-    @Transactional
-    public String acceptSubscription(String subscriberUsername) {
-        UserEntity user = userService.getCurrentAuthUser();
-
-        UserEntity subscriber = userService.findByUsername(subscriberUsername)
-                .orElseThrow(() -> new IllegalArgumentException("user not found"));
-
-        SubscriptionID id = SubscriptionID.builder()
-                .userId(user.getId())
-                .subscriberId(subscriber.getId())
-                .build();
-
-        SubscriptionEntity subscription = subscriptionRepository.findById(id).get();
-        subscription.setAccepted(true);
-
-        subscriptionRepository.save(subscription);
-
-        SubscriptionEntity inverseSubscription = SubscriptionEntity.builder()
-                .id(SubscriptionID.builder()
-                        .userId(subscriber.getId())
-                        .subscriberId(user.getId())
-                        .build())
-                .user(subscriber)
-                .subscriber(user)
-                .accepted(true)
-                .build();
-
-        subscriptionRepository.save(inverseSubscription);
-
-        return "accepted subscription for " + subscriberUsername;
-    }
-
 }
