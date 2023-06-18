@@ -17,10 +17,10 @@ import ru.elseff.socialmedia.web.api.modules.subscription.service.SubscriptionSe
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/api/v1/subscriptions")
 @SecurityRequirement(name = "Bearer Authentication")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Subscription Controller", description = "Управление подписками")
-@RequestMapping(value = "/api/v1/subscriptions")
 public class SubscriptionController {
 
     SubscriptionService subscriptionService;
