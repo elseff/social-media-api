@@ -7,11 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
 @RestController
+@RequestMapping("/welcome")
 @SecurityRequirement(name = "Bearer Authentication")
 @Tag(name = "Welcome Controller", description = "Приветствие")
 public class WelcomeController {
@@ -28,7 +30,7 @@ public class WelcomeController {
                     )
             }
     )
-    @GetMapping("/welcome")
+    @GetMapping
     public String hello(Principal principal) {
         String username = principal.getName();
         return String.format("%s успешно вошёл и имеет доступ к  API!!!", username);
