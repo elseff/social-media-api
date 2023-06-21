@@ -44,7 +44,7 @@ class SubscriptionServiceTest {
     @DisplayName("Изменить статус подписк - подписаться на нового пользователя")
     void changeSub_New_Subscription() {
         given(userService.getCurrentAuthUser()).willReturn(getUser1());
-        given(userService.findByUsername(anyString())).willReturn(Optional.of(getUser2()));
+        given(userService.findByUsername(anyString())).willReturn(getUser2());
         given(subscriptionRepository.findByUserAndSubscriber(any(UserEntity.class), any(UserEntity.class))).willReturn(Optional.empty());
         given(subscriptionRepository.save(any(SubscriptionEntity.class))).willReturn(getSubscriptionEntity());
 
@@ -64,7 +64,7 @@ class SubscriptionServiceTest {
     @DisplayName("Изменить статус подписки - подписаться на себя")
     void changeSub_Sub_To_Yourself() {
         given(userService.getCurrentAuthUser()).willReturn(getUser1());
-        given(userService.findByUsername(anyString())).willReturn(Optional.ofNullable(getUser1()));
+        given(userService.findByUsername(anyString())).willReturn(getUser1());
 
         String expectedSubscriptionStatus = "You can't subscribe yourself";
         String actualSubscriptionStatus = subscriptionService.changeSub(getUser1().getUsername());
@@ -79,7 +79,7 @@ class SubscriptionServiceTest {
     @Test
     @DisplayName("Изменить статус подписки, если пользователь не найден")
     void changeSub_If_User_Is_Not_Found() {
-        given(userService.findByUsername(anyString())).willReturn(Optional.empty());
+        given(userService.findByUsername(anyString())).willThrow(new IllegalArgumentException("user not found"));
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> subscriptionService.changeSub(anyString()));
 
@@ -98,7 +98,7 @@ class SubscriptionServiceTest {
         given(subscriptionRepository.findByUserAndSubscriber(getUser2(), getUser1())).willReturn(Optional.of(getSubscriptionEntity()));
         given(subscriptionRepository.findByUserAndSubscriber(getUser1(), getUser2())).willReturn(Optional.empty());
         willDoNothing().given(subscriptionRepository).delete(any(SubscriptionEntity.class));
-        given(userService.findByUsername(anyString())).willReturn(Optional.of(getUser2()));
+        given(userService.findByUsername(anyString())).willReturn(getUser2());
         given(userService.getCurrentAuthUser()).willReturn(getUser1());
 
         String expectedSubscriptionStatus = "subscription on " + getUser2().getUsername() + " canceled";
@@ -121,7 +121,7 @@ class SubscriptionServiceTest {
         given(subscriptionRepository.findByUserAndSubscriber(getUser1(), getUser2())).willReturn(Optional.of(getInversedSubscriptionEntity()));
         given(subscriptionRepository.save(any(SubscriptionEntity.class))).willReturn(getInversedSubscriptionEntity());
         willDoNothing().given(subscriptionRepository).delete(any(SubscriptionEntity.class));
-        given(userService.findByUsername(anyString())).willReturn(Optional.of(getUser2()));
+        given(userService.findByUsername(anyString())).willReturn(getUser2());
         given(userService.getCurrentAuthUser()).willReturn(getUser1());
 
         String expectedSubscriptionStatus = "subscription on " + getUser2().getUsername() + " canceled";
@@ -144,7 +144,7 @@ class SubscriptionServiceTest {
         given(subscriptionRepository.findByUserAndSubscriber(getUser2(), getUser1())).willReturn(Optional.empty());
         given(subscriptionRepository.findByUserAndSubscriber(getUser1(), getUser2())).willReturn(Optional.of(getInversedSubscriptionEntity()));
         given(subscriptionRepository.save(any(SubscriptionEntity.class))).willReturn(getInversedSubscriptionEntity());
-        given(userService.findByUsername(anyString())).willReturn(Optional.of(getUser2()));
+        given(userService.findByUsername(anyString())).willReturn(getUser2());
         given(userService.getCurrentAuthUser()).willReturn(getUser1());
 
         String expectedSubscriptionStatus = "subscription of " + getUser2().getUsername() + " accepted";

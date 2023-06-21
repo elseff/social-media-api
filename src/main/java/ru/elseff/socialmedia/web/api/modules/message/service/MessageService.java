@@ -31,16 +31,14 @@ public class MessageService {
 
     @Transactional
     public Set<MessageEntity> findAllBySenderUsername(String senderUsername) {
-        UserEntity sender = userService.findByUsername(senderUsername)
-                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+        UserEntity sender = userService.findByUsername(senderUsername);
 
         return messageRepository.findAllBySender(sender);
     }
 
     @Transactional
     public MessageEntity sendMessageToUserByUsername(SendMessageDto messageDto, String username) {
-        UserEntity recipient = userService.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+        UserEntity recipient = userService.findByUsername(username);
 
         MessageEntity message = MessageEntity.builder()
                 .sendAt(Timestamp.from(Instant.now()))

@@ -60,7 +60,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("Найти все сообщения от конкретного пользователя")
     void findAllBySenderUsername() {
-        given(userService.findByUsername(anyString())).willReturn(java.util.Optional.ofNullable(getUserEntity()));
+        given(userService.findByUsername(anyString())).willReturn(getUserEntity());
         given(messageRepository.findAllBySender(any(UserEntity.class))).willReturn(Set.of(getMessage1(), getMessage2()));
 
         Set<MessageEntity> expectedMessages = Set.of(getMessage1(), getMessage2());
@@ -77,7 +77,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("Найти все сообщения от конкретного пользователя, если он не найден")
     void findAllBySenderUsername_If_Sender_Is_Not_Found() {
-        given(userService.findByUsername(anyString())).willReturn(Optional.empty());
+        given(userService.findByUsername(anyString())).willThrow(new IllegalArgumentException("user not found"));
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> messageService.findAllBySenderUsername(anyString()));
@@ -94,7 +94,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("Отправить сообщение пользователю по имени")
     void sendMessageToUserByUsername() {
-        given(userService.findByUsername(anyString())).willReturn(Optional.ofNullable(getUserEntity()));
+        given(userService.findByUsername(anyString())).willReturn(getUserEntity());
         given(userService.getCurrentAuthUser()).willReturn(getUserEntity());
         given(messageRepository.save(any(MessageEntity.class))).willReturn(getMessageEntityFromDb());
 
@@ -113,7 +113,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("Отправить сообщение несуществующему пользователю")
     void sendMessageToUserByUsername_If_User_Is_Not_Found() {
-        given(userService.findByUsername(anyString())).willReturn(Optional.empty());
+        given(userService.findByUsername(anyString())).willThrow(new IllegalArgumentException("user not found"));
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> messageService.sendMessageToUserByUsername(getSendMessageDto(), "not found"));

@@ -32,13 +32,15 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<UserEntity> findById(Long id) {
-        return userRepository.findById(id);
+    public UserEntity findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("user not found"));
     }
 
     @Transactional
-    public Optional<UserEntity> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(()->new IllegalArgumentException("user not found"));
     }
 
     @Transactional
@@ -51,8 +53,7 @@ public class UserService {
 
     @Transactional
     public List<UserEntity> findFriendsByUsername(String username) {
-        UserEntity user = findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("user not found"));
+        UserEntity user = findByUsername(username);
 
         List<SubscriptionEntity> friends = subscriptionRepository.findAllByUserAndAccepted(user, true);
 

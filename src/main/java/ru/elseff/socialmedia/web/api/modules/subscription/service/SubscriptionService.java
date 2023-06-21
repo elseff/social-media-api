@@ -24,8 +24,7 @@ public class SubscriptionService {
 
     @Transactional
     public String changeSub(String username) {
-        UserEntity user = userService.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+        UserEntity user = userService.findByUsername(username);
 
         UserEntity subscriber = userService.getCurrentAuthUser();
 
