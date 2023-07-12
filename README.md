@@ -1,6 +1,6 @@
 # Social media
 
-> Техническое задание
+> social-media-api
 
 <hr/>
 
