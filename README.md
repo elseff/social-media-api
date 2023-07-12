@@ -1,4 +1,4 @@
-### Social Media
+<img alt="social-media logo" src="social-media-logo.png"/>
 
 [![Actions](https://github.com/elseff/social-media/workflows/Build/badge.svg)](https://github.com/elseff/social-media/actions)
 
