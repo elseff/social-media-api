@@ -1,10 +1,12 @@
-# Social media
+### Social Media
 
-<hr/>
+[![Actions](https://github.com/elseff/social-media/workflows/Build/badge.svg)](https://github.com/elseff/social-media/actions)
 
-Социальная медиа платформа, позволяющая пользователям регистироваться, входить в систему, создавать посты, переписываться, подписываться на других пользователей и получать свою ленту активности
+    Социальная медиа платформа, позволяющая пользователям регистрироваться, 
+    входить в систему, создавать посты, переписываться, подписываться на других
+    пользователей и получать свою ленту активности
 
-Технологии и языки:
+<b>Технологии и языки:</b>
 1. Java 17
 2. Spring (Boot, Data JPA, Security (JWT), Web)
 3. OpenAPI 3
@@ -12,10 +14,10 @@
 5. Flyway
 6. Junit 5, Mockito, AssertJ
 7. Hateoas
-8. Test COntainers
+8. Test Containers
 9. Maven
 
-### Для запуска
+### Запуск
 #### Запуск с помощью docker-compose
 Вы можете запустить приложение через docker-compose
 
