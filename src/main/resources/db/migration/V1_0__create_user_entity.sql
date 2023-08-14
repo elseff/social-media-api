@@ -15,19 +15,17 @@ VALUES (0,
         'admin@admin.com',
         '$2a$12$tbVMEjv2G61M5ucrHW0ljeHK6ZHxRj9qo2XRjbIzk5T7Zq3Ld/7Wy');
 
-INSERT INTO user_entity (id, username, email, password)
-VALUES (1,
-        'elseff',
+INSERT INTO user_entity (username, email, password)
+VALUES ('elseff',
         'elseff@gmail.com',
         '$2a$12$RajVP3Niv3Mj8zabrJ10weE24CYFWzy75V2gTOPtKmlsnyiXjcYpC'); -- 1234
 
-INSERT INTO user_entity (id, username, email, password)
-VALUES (2,
-        'willson',
+INSERT INTO user_entity (username, email, password)
+VALUES ('willson',
         'willson@gmail.com',
         '$2a$12$RajVP3Niv3Mj8zabrJ10weE24CYFWzy75V2gTOPtKmlsnyiXjcYpC'); -- 1234
-INSERT INTO user_entity (id, username, email, password)
-VALUES (3,
-        'Jacky',
+INSERT INTO user_entity (username, email, password)
+VALUES ('Jacky',
         'jacky@gmail.com',
         '$2a$12$RajVP3Niv3Mj8zabrJ10weE24CYFWzy75V2gTOPtKmlsnyiXjcYpC'); --1234
+
