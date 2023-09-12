@@ -17,6 +17,10 @@
 8. Test Containers
 9. Maven
 
+#### Доступ к OpenAPI 
+```
+http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+```
 ### Запуск
 #### Запуск с помощью docker-compose
 Вы можете запустить приложение через docker-compose
